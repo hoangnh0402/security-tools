@@ -1,0 +1,42 @@
+# Gemini Project Rules for Security Tools (HQC System)
+
+You are an AI assistant helping to build a multi-module Spring Boot application using Hexagonal Architecture for the internal Security Scanning Tool.
+Follow these rules strictly when generating code, refactoring, or providing technical advice.
+
+## 1. Tech Stack & Core Environment
+- **Java:** Version 17+ (Prioritize modern features like `record` for DTOs, Pattern Matching, Switch Expressions).
+- **Framework:** Spring Boot 3.x
+- **Build Tool:** Maven (Multi-module structure based on existing `pom.xml` design).
+- **Database:** PostgreSQL.
+- **Migration:** Flyway (Must use Flyway for all schema definitions and updates).
+
+## 2. Architecture: Hexagonal (Clean Architecture)
+- **Domain Layer (`domain`):**
+  - **Rule:** ZERO dependencies on Spring Framework (`org.springframework.*`), JPA, or external infrastructure libraries. (Exceptions: basic Jakarta inject annotations like `@Named` if really needed).
+  - **Contains:** Business Models (Entities, Value Objects), Domain Exceptions, Use Case interfaces, and Ports (Interfaces for out-bound communication).
+- **Infrastructure Layer (`infrastructure`):**
+  - **Rule:** Depends ON the Domain module. Connects the application to DB, external APIs.
+  - **Contains:** Adapters implementing Domain Ports (e.g., `ScanRepositoryImpl` implements `ScanRepository`), Spring Data JPA Repositories, Database Entities, and Data Mappers.
+- **Application/API Layer (`application` / `api`):**
+  - **Rule:** Depends ON the Domain module. It drives the application.
+  - **Contains:** REST Controllers, Request/Response DTOs, and Global Exception Handling (`@RestControllerAdvice`).
+  - **Restriction:** NEVER leak JPA Entities or Database models to the Controller layer. Always use DTOs for input/output.
+
+## 3. Coding Conventions & Standards
+- **RESTful APIs:** Use OpenAPI 3.0 standards. URL paths must use `kebab-case` and plural nouns (e.g., `POST /api/v1/scan-jobs`). Use strict HTTP verbs (`GET`, `POST`, `PUT`, `DELETE`, `PATCH`).
+- **Dependency Injection:** Use Constructor Injection (prefer Lombok's `@RequiredArgsConstructor`). DO NOT use field injection (`@Autowired`).
+- **Naming Conventions:**
+  - Interfaces: Do not use the `I` prefix (e.g., `UserRepository`).
+  - Implementations: Use the `Impl` suffix (e.g., `UserRepositoryImpl`).
+  - DTOs: Use suffixes like `Request`, `Response`, `Cmd` (e.g., `CreateScanJobRequest`).
+  - Variables/Methods: `camelCase`.
+  - Constants: `UPPER_SNAKE_CASE`.
+  - Database objects (Tables/Fields): `snake_case`.
+
+## 4. Error & Exception Handling
+- Throw custom runtime exceptions inheriting from a base project exception.
+- Use a global `@RestControllerAdvice` to translate all exceptions into a standard JSON error wrapper (e.g., `{ "timestamp": "...", "status": 400, "error": "...", "message": "...", "path": "..." }`).
+
+## 5. Testing
+- **Domain Layer:** Unit test 100% of core business logic using JUnit 5 and Mockito. No Spring context loading here!
+- **Infrastructure Layer:** Use `Testcontainers` (PostgreSQL module) for testing JPA Repositories and Database Queries to ensure correctness.
