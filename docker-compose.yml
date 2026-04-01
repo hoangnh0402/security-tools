@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: hqc_postgres
+    environment:
+      POSTGRES_USER: hqc_admin
+      POSTGRES_PASSWORD: hqc_password
+      POSTGRES_DB: hqc_security
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  security-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hqc_security_app
+    ports:
+      - "8080:8080"
+    environment:
+      # Sử dụng host của container là `postgres` theo mạng ảo của Docker Compose
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hqc_security
+      SPRING_DATASOURCE_USERNAME: hqc_admin
+      SPRING_DATASOURCE_PASSWORD: hqc_password
+      # Flyway sẽ lo phần Data Migration
+      SPRING_FLYWAY_ENABLED: "true"
+      SPRING_JPA_HIBERNATE_DDL_AUTO: validate
+    depends_on:
+      - postgres
+    restart: on-failure
+
+volumes:
+  postgres_data:

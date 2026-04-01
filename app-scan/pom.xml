@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>security-tools-parent</artifactId>
+        <groupId>com.hqc.security</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>app-scan</artifactId>
+    <packaging>jar</packaging>
+    <name>Runner - Scan Worker</name>
+
+    <dependencies>
+        <!-- Tái sử dụng tầng DB Config chung -->
+        <dependency>
+            <groupId>com.hqc.security</groupId>
+            <artifactId>infrastructure</artifactId>
+        </dependency>
+        <!-- Chỉ import logic Core scan -->
+        <dependency>
+            <groupId>com.hqc.security</groupId>
+            <artifactId>scan</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.hqc.security.AppScanApplication</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
