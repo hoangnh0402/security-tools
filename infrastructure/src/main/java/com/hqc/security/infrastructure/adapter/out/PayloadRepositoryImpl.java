@@ -35,6 +35,8 @@ public class PayloadRepositoryImpl implements PayloadRepository {
                 entity.getId(),
                 entity.getType(),
                 entity.getValue(),
+                entity.getContext(),
+                entity.getEncoding(),
                 entity.isActive()
         );
     }

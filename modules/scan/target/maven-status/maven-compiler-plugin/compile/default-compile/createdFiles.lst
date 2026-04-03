@@ -1,0 +1,5 @@
+com\hqc\security\scan\scanner\MissingSecurityHeadersPlugin.class
+com\hqc\security\scan\scanner\PassiveScanPlugin.class
+com\hqc\security\scan\scanner\MissingSecurityHeadersPlugin$HeaderCheck.class
+com\hqc\security\scan\scanner\CookieSecurityPlugin.class
+com\hqc\security\scan\scanner\InformationDisclosurePlugin.class

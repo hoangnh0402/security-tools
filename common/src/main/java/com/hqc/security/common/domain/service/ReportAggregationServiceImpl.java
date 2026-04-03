@@ -31,7 +31,7 @@ public class ReportAggregationServiceImpl implements ReportUseCase {
     @Override
     public ReportSummary getProjectSummary(UUID projectId) {
         // 1. Phân tích DAST
-        List<ScanJob> jobs = scanJobRepository.findByProjectId(projectId);
+        List<ScanJob> jobs = scanJobRepository.findAllByProjectId(projectId);
         int totalScanJobs = jobs.size();
         
         int high = 0;

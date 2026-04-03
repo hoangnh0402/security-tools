@@ -23,6 +23,12 @@ public class PayloadJpaEntity {
     @Column(nullable = false)
     private String value;
 
+    @Column(length = 20)
+    private String context = "URL";
+
+    @Column(length = 30)
+    private String encoding = "NONE";
+
     @Column(name = "is_active")
     private boolean isActive = true;
 }

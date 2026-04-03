@@ -29,7 +29,7 @@ public class CsvReportExportServiceImpl implements ReportExportService {
         csvBuilder.append('\ufeff');
 
         // Headers
-        csvBuilder.append("ID,Mức độ (Severity),Mảng Tấn Công (Type),Chẩn đoán (Title),Mô tả Chi Tiết (Description),Trạng thái,Ngày quét\n");
+        csvBuilder.append("ID,Mức độ (Severity),Mảng Tấn Công (Type),Chẩn đoán (Title),Mô tả Chi Tiết (Description),Tác Động (Impact),Khuyến Nghị (Recommendation),Bằng Chứng (PoC),Trạng thái,Ngày quét\n");
 
         for (Vulnerability v : vulns) {
             csvBuilder.append(escapeSpecialCharacters(v.id().toString())).append(",");
@@ -37,6 +37,9 @@ public class CsvReportExportServiceImpl implements ReportExportService {
             csvBuilder.append(escapeSpecialCharacters(v.type())).append(",");
             csvBuilder.append(escapeSpecialCharacters(v.title())).append(",");
             csvBuilder.append(escapeSpecialCharacters(v.description())).append(",");
+            csvBuilder.append(escapeSpecialCharacters(v.impact())).append(",");
+            csvBuilder.append(escapeSpecialCharacters(v.recommendation())).append(",");
+            csvBuilder.append(escapeSpecialCharacters(v.proofOfConcept())).append(",");
             csvBuilder.append(escapeSpecialCharacters(v.status())).append(",");
             csvBuilder.append(escapeSpecialCharacters(v.createdAt().toString())).append("\n");
         }

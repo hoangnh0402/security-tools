@@ -30,4 +30,13 @@ public class DependencyController {
                 
         return scannerService.scanDependencies(projectId, dependencies);
     }
+
+    @PostMapping(value = "/upload", consumes = "multipart/form-data")
+    public List<DependencyVulnerability> scanManifest(
+            @PathVariable UUID projectId,
+            @RequestParam("file") org.springframework.web.multipart.MultipartFile file) throws java.io.IOException {
+            
+        String fileContent = new String(file.getBytes(), java.nio.charset.StandardCharsets.UTF_8);
+        return scannerService.scanManifest(projectId, file.getOriginalFilename(), fileContent);
+    }
 }
